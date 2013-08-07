@@ -54,7 +54,7 @@ Usage: ./vm_info [ -u <UUID> | -i <INSTANCE> | -p <PRIVATE_IP> | -f <FLOATING_IP
       -p   Private IP Address of instance
       -f   Floating IP Address of instance
 
-Usage: ./vm_list [ -c <CNODE> | -t <TENANT_ID> ] -q
+Usage: ./vm_list [ -n <HOSTNAME> | -c <CNODE> | -t <TENANT_ID> ] -q
       -n   The hostname OR partial match (4 character minimum)
       -c   Shortname of compute node
       -t   The tenant/project ID

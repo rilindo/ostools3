@@ -7,7 +7,7 @@ openstack = OSTools('ostools.cfg')
 quiet = False
 
 def usage():
-    print("Usage: %s [ -c <CNODE> | -t <TENANT_ID> ] -q" % sys.argv[0])
+    print("Usage: %s [ -n <HOSTNAME> | -c <CNODE> | -t <TENANT_ID> ] -q" % sys.argv[0])
     print("      -n   The hostname OR partial match (4 character minimum)")
     print("      -c   Shortname of compute node")
     print("      -t   The tenant/project ID")
