@@ -1,0 +1,29 @@
+[release]
+#version = diablo
+#version = essex
+#version = folsom
+#version = grizzly
+
+[novadb]
+user = 
+name = 
+pass = 
+host = 
+
+[keystonedb]
+user = 
+name = 
+pass = 
+host = 
+
+[glancedb]
+user = 
+name = 
+pass = 
+host = 
+
+[cinderdb]
+user = 
+name = 
+pass = 
+host = 
