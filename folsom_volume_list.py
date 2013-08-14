@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from ostools import *
-import sys,getopt
+import sys,getopt,json
 
 openstack = OSTools('ostools.cfg')
 
@@ -35,23 +35,25 @@ for opt, arg in opts:
                     # Chop the volume record into variables
                     created_at,vol_id,user_id,project_id,size,instance_uuid, \
                     status,attach_status,display_name,display_description = volume
-  
                     # Get the user_name
                     user_info = openstack.user_info_by_id(user_id)
                     try:
                         user_name = user_info[0]
                     except:
                         user_name = red + 'DELETED' + nrm
+                    # Get the LUN
+                    conn_info = json.loads(openstack.volume_lun(vol_id))
                     # Output
                     print
                     print("%s%s [%s]%s" % (blu, vol_id, display_name, nrm))
-                    print("    Created: %s" % created_at)
-                    print("    Creator: %s [%s]" % (user_id, user_name))
-                    print("     Tenant: %s" % project_id)
-                    print("       Size: %s GB" % size)
-                    print("Description: %s" % display_description)
-                    print("     Status: %s/%s" % (attach_status, status))
-                    print("   Attached: %s [%s]" % (instance_uuid, vm[5]))
+                    print("Created:  %s" % created_at)
+                    print("Creator:  %s [%s]" % (user_id, user_name))
+                    print("Tenant:   %s" % project_id)
+                    print("Size:     %s GB" % size)
+                    print("Descr:    %s" % display_description)
+                    print("Status:   %s/%s" % (attach_status, status))
+                    print("Attached: %s [%s]" % (instance_uuid, vm[5]))
+                    print("LUN:      %s" % conn_info['data']['device_path'])
 
     elif opt in "-t":
         volume_list = openstack.volumes_by_tenantid(arg)
@@ -68,16 +70,18 @@ for opt, arg in opts:
             # Output
             print
             print("%s%s [%s]%s" % (blu, vol_id, display_name, nrm))
-            print("    Created: %s" % created_at)
-            print("    Creator: %s [%s]" % (user_id, user_name))
-            print("     Tenant: %s" % project_id)
-            print("       Size: %s GB" % size)
-            print("Description: %s" % display_description)
-            print("     Status: %s/%s" % (attach_status, status))
+            print("Created:  %s" % created_at)
+            print("Creator:  %s [%s]" % (user_id, user_name))
+            print("Tenant:   %s" % project_id)
+            print("Size:     %s GB" % size)
+            print("Descr:    %s" % display_description)
+            print("Status:   %s/%s" % (attach_status, status))
             # If we have an uuid, then it's mounted, so display that.
             if instance_uuid:
                 vm_info = openstack.vm_info('uuid', instance_uuid)
-                print("   Attached: %s [%s]" % (instance_uuid, vm_info[5]))
+                conn_info = json.loads(openstack.volume_lun(vol_id))
+                print("Attached: %s [%s]" % (instance_uuid, vm_info[5]))
+                print("LUN:      %s" % conn_info['data']['device_path'])
     else:
         usage()
 

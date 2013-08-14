@@ -195,6 +195,15 @@ class OSTools:
         return results
 
 
+    def volume_info(self, volumeid):
+        querystr = "SELECT created_at,id,user_id,project_id,size,instance_uuid,status,attach_status,display_name,display_description \
+                    FROM volumes \
+                    WHERE deleted=0 AND id='%s'" % (volumeid)
+
+        results = self.__query(querystr, 'volume_info', 'cinderdb', 1)
+        return results
+
+
     def volumes_by_uuid(self, uuid):
         querystr = "SELECT created_at,id,user_id,project_id,size,instance_uuid,status,attach_status,display_name,display_description \
                     FROM volumes \
@@ -211,6 +220,13 @@ class OSTools:
 
         results = self.__query(querystr, 'volumes_by_tenantid', 'cinderdb')
         return results
+
+
+    def volume_lun(self, volumeid):
+        querystr = "SELECT connection_info FROM block_device_mapping WHERE volume_id='%s'" % (volumeid)
+
+        results = self.__query(querystr, 'volume_lun', 'novadb', 1)
+        return results[0]
 
 
     def tenant_name(self, tenantid):
