@@ -26,7 +26,7 @@ for opt, arg in opts:
         vm_list = openstack.vm_list('cnode', arg)
         # Loop thru each vm
         for vm in vm_list:
-            uuid = vm[3]
+            instid,host,project_id,uuid,vm_state,hostname = vm
             # Get volume information for this vm (if any exists)
             volume_list = openstack.volumes_by_uuid(uuid)
             # If volumes found, display them
@@ -53,7 +53,7 @@ for opt, arg in opts:
                     print("Descr:    %s" % display_description)
                     print("Status:   %s/%s" % (attach_status, status))
                     print("Attached: %s [%s]" % (instance_uuid, vm[5]))
-                    print("LUN:      %s" % conn_info['data']['device_path'])
+                    print("LUN:      %s:%s" % (host,conn_info['data']['device_path']))
 
     elif opt in "-t":
         volume_list = openstack.volumes_by_tenantid(arg)
@@ -78,10 +78,15 @@ for opt, arg in opts:
             print("Status:   %s/%s" % (attach_status, status))
             # If we have an uuid, then it's mounted, so display that.
             if instance_uuid:
-                vm_info = openstack.vm_info('uuid', instance_uuid)
+                #vm_info = openstack.vm_info('uuid', instance_uuid)
+                #conn_info = json.loads(openstack.volume_lun(vol_id))
+                #print("Attached: %s [%s]" % (instance_uuid, vm_info[5]))
+                #print("LUN:      %s" % conn_info['data']['device_path'])
+                user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',instance_uuid)
                 conn_info = json.loads(openstack.volume_lun(vol_id))
-                print("Attached: %s [%s]" % (instance_uuid, vm_info[5]))
-                print("LUN:      %s" % conn_info['data']['device_path'])
+                print("Attached: %s [%s]" % (instance_uuid, hostname))
+                print("LUN:      %s:%s" % (host,conn_info['data']['device_path']))
+
     else:
         usage()
 

@@ -25,6 +25,7 @@ rm("vm_list")
 rm("tenant_info")
 rm("tenant_list")
 rm("volume_list")
+rm("volume_info")
 
 os.symlink(version+"_ostools.py","ostools.py")
 os.symlink(version+"_email_list.py","email_list")
