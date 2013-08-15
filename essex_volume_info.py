@@ -50,7 +50,7 @@ for opt, arg in opts:
             vm_state,hostname,host,uuid = openstack.vm_info('instance', instance_id)
             conn_info = json.loads(openstack.volume_lun(vol_id))
             print("Attached: %s [%s]" % (uuid, hostname))
-            print("LUN:     %s:%s" % (host,conn_info['data']['device_path']))
+            print("LUN:      %s:%s" % (host,conn_info['data']['device_path']))
     else:
         usage()
 
