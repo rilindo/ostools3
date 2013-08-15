@@ -65,3 +65,7 @@ Usage: ./volume_list [ -c <CNODE> | -t <TENANT_ID> ] -q
       -c   Shortname of compute node
       -t   The tenant/project ID
 
+(NOT available in Diablo)
+Usage: ./volume_info -v <VOLUME_ID>
+      -v   Volume ID
+
