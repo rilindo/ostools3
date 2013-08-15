@@ -78,10 +78,6 @@ for opt, arg in opts:
             print("Status:   %s/%s" % (attach_status, status))
             # If we have an uuid, then it's mounted, so display that.
             if instance_uuid:
-                #vm_info = openstack.vm_info('uuid', instance_uuid)
-                #conn_info = json.loads(openstack.volume_lun(vol_id))
-                #print("Attached: %s [%s]" % (instance_uuid, vm_info[5]))
-                #print("LUN:      %s" % conn_info['data']['device_path'])
                 user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',instance_uuid)
                 conn_info = json.loads(openstack.volume_lun(vol_id))
                 print("Attached: %s [%s]" % (instance_uuid, hostname))
