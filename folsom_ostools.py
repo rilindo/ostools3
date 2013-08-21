@@ -141,7 +141,10 @@ class OSTools:
                     WHERE deleted=0 AND address='%s'" % (address)
 
         results = self.__query(querystr, 'uuid_by_fixedip', 'novadb', 1)
-        return results[0]
+        if results:
+            return results[0]
+        else:
+            return None
 
 
     def uuid_by_floatingip(self, address):
@@ -151,12 +154,18 @@ class OSTools:
 
         fixedipid = self.__query(querystr, 'uuid_by_floatingip 1', 'novadb', 1)
 
+        if not fixedipid:
+            return None
+
         querystr = "SELECT instance_uuid \
                     FROM fixed_ips \
                     WHERE deleted=0 AND id='%s'" % (fixedipid[0])
 
         results = self.__query(querystr, 'uuid_by_floatingip 2', 'novadb', 1)
-        return results[0]
+        if results:
+            return results[0]
+        else:
+            return None
 
 
     def uuid_by_instanceid(self, instanceid):
@@ -165,7 +174,10 @@ class OSTools:
                     WHERE deleted=0 AND id='%s'" % (instanceid)
 
         results = self.__query(querystr, 'uuid_by_instanceid', 'novadb', 1)
-        return results[0]
+        if results:
+            return results[0]
+        else:
+            return None
 
 
     def fixedip_by_uuid(self, uuid):

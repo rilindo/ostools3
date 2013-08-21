@@ -34,7 +34,11 @@ for opt, arg in opts:
             hexval = arg[arg.index('-')+1:] # Strip off "instance-" or "i-"
         else:
             hexval = arg
-        instid = int(hexval,16)             # convert hex to dec
+        try:
+            instid = int(hexval,16)             # convert hex to dec
+        except:
+            print("Invalid instance name! [%s%s%s]" % (red,arg,nrm))
+            sys.exit(2)
         uuid = openstack.uuid_by_instanceid(instid)
     elif opt in "-p":
         uuid = openstack.uuid_by_fixedip(arg)
@@ -43,10 +47,18 @@ for opt, arg in opts:
     else:
         usage()
 
+if not uuid:
+    print("Unable to locate instance!")
+    sys.exit(2)
+
 #########################
 # Gather all the data
 #########################
-user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+try:
+    user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+except:
+    print("Invalid uuid! [%s%s%s]" % (red,uuid,nrm))
+    sys.exit(2)
 volumes = openstack.volumes_by_uuid(uuid)
 user_info = openstack.user_info_by_id(user_id)
 user_name = user_info[0]
