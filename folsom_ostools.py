@@ -79,24 +79,13 @@ class OSTools:
 
 
     def cnode_info(self,sort='ASC'):
-        results = []
-        keys = ('vcpus','memory_mb','vcpus_used','memory_mb_used','running_vms','hypervisor_hostname','status')
-        querystr = "SELECT vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname \
+        querystr = "SELECT compute_nodes.vcpus,compute_nodes.memory_mb,compute_nodes.vcpus_used, \
+                    compute_nodes.memory_mb_used,compute_nodes.running_vms,services.host,services.disabled \
                     FROM compute_nodes \
-                    WHERE deleted=0 \
-                    ORDER BY running_vms %s" % (sort)
-        info = self.__query(querystr, 'cnode_info 1', 'novadb')
+                    JOIN services ON compute_nodes.service_id=services.id \
+                    ORDER BY compute_nodes.running_vms %s" % (sort)
 
-        querystr = "SELECT host,disabled FROM services WHERE deleted=0 AND topic='compute'"
-        states = dict(self.__query(querystr, 'cnode_info 2', 'novadb'))
-
-        for node in info:
-            vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname = node
-            host = hypervisor_hostname.split('.')[0]
-            status = states[host]
-            vals = (vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname,status)
-            results.append(dict(zip(keys,vals)))
-
+        results = self.__query(querystr, 'cnode_info', 'novadb')
         return results
 
 

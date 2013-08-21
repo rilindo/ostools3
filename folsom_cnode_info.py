@@ -40,11 +40,11 @@ cnodes = openstack.cnode_info(sort)
 if not quiet:
     print("%s%s%-4s %-7s %-14s %-10s %s%s" % (bld,uln,"VMs","VCPU","RAM","STATUS","CNODE",nrm))
 for cnode in cnodes:
-    cpu = str(cnode['vcpus_used']) + '/' + str(cnode['vcpus'])
-    ram = str(cnode['memory_mb_used']) + '/' + str(cnode['memory_mb'])
-    host = cnode['hypervisor_hostname'].split('.')[0]
-    if cnode['status']:
+    vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,host,disabled = cnode
+    cpu = str(vcpus_used) + '/' + str(vcpus)
+    ram = str(memory_mb_used) + '/' + str(memory_mb)
+    if disabled:
        state = "disabled"
     else:
        state = "enabled"
-    print("%-4s %-7s %-14s %-10s %s" % (cnode['running_vms'],cpu,ram,state,host))
+    print("%-4s %-7s %-14s %-10s %s" % (running_vms,cpu,ram,state,host))
