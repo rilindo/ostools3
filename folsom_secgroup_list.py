@@ -30,20 +30,40 @@ if not opts:
 ########################
 for opt, arg in opts:
     if opt in "-u":      # UUID
-        user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',arg)
+        try:
+            user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',arg)
+        except:
+            print("Invalid uuid! [%s%s%s]" % (red,arg,nrm))
+            sys.exit(2)
     elif opt in "-i":    # INSTANCE ID
         if "instance-" in arg or "i-" in arg:
             hexval = arg[arg.index('-')+1:] # Strip off "instance-" or "i-"
         else:
             hexval = arg
-        instid = int(hexval,16)         # convert hex to dec
-        user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('instance',instid)
+        try:
+            instid = int(hexval,16)             # convert hex to dec
+        except:
+            print("Invalid instance name! [%s%s%s]" % (red,arg,nrm))
+            sys.exit(2)
+        try:
+            user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('instance',instid)
+        except:
+            print("Invalid instance name! [%s%s%s]" % (red,arg,nrm))
+            sys.exit(2)
     elif opt in "-p":
         uuid = openstack.uuid_by_fixedip(arg)
-        user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+        if uuid:
+            user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+        else:
+            print("Unable to locate instance!")
+            sys.exit(2)
     elif opt in "-f":
         uuid = openstack.uuid_by_floatingip(arg)
-        user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+        if uuid:
+            user_id,created_at,instid,project_id,vm_state,hostname,host,uuid = openstack.vm_info('uuid',uuid)
+        else:
+            print("Unable to locate instance!")
+            sys.exit(2)
     else:
         usage()
 
