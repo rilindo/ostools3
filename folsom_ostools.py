@@ -78,6 +78,28 @@ class OSTools:
         return (host,user,password,name)
 
 
+    def cnode_info(self,sort='ASC'):
+        results = []
+        keys = ('vcpus','memory_mb','vcpus_used','memory_mb_used','running_vms','hypervisor_hostname','status')
+        querystr = "SELECT vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname \
+                    FROM compute_nodes \
+                    WHERE deleted=0 \
+                    ORDER BY running_vms %s" % (sort)
+        info = self.__query(querystr, 'cnode_info 1', 'novadb')
+
+        querystr = "SELECT host,disabled FROM services WHERE deleted=0 AND topic='compute'"
+        states = dict(self.__query(querystr, 'cnode_info 2', 'novadb'))
+
+        for node in info:
+            vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname = node
+            host = hypervisor_hostname.split('.')[0]
+            status = states[host]
+            vals = (vcpus,memory_mb,vcpus_used,memory_mb_used,running_vms,hypervisor_hostname,status)
+            results.append(dict(zip(keys,vals)))
+
+        return results
+
+
     def vm_list(self, key, val):
         if key == "cnode":
             querystr = "SELECT id,host,project_id,uuid,vm_state,hostname \
