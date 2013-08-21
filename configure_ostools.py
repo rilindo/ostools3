@@ -38,4 +38,5 @@ os.symlink(version+"_tenant_list.py","tenant_list")
 if version != 'diablo':
    os.symlink(version+"_volume_list.py","volume_list")
    os.symlink(version+"_volume_info.py","volume_info")
+   os.symlink(version+"_cnode_info.py","cnode_info")
 

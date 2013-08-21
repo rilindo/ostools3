@@ -69,3 +69,9 @@ Usage: ./volume_list [ -c <CNODE> | -t <TENANT_ID> ] -q
 Usage: ./volume_info -v <VOLUME_ID>
       -v   Volume ID
 
+(NOT available in Diablo)
+Usage: ./cnode_info
+      -r   Reverse sort order
+      -q   Suppress header
+      -h   This help
+
