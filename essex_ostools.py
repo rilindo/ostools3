@@ -79,6 +79,17 @@ class OSTools:
         return (host,user,password,name)
 
 
+    def cnode_info(self,sort='ASC'):
+        querystr = "SELECT compute_nodes.vcpus,compute_nodes.memory_mb,compute_nodes.vcpus_used, \
+                    compute_nodes.memory_mb_used,compute_nodes.running_vms,services.host,services.disabled \
+                    FROM compute_nodes \
+                    JOIN services ON compute_nodes.service_id=services.id \
+                    ORDER BY compute_nodes.running_vms %s" % (sort)
+
+        results = self.__query(querystr, 'cnode_info', 'novadb')
+        return results
+
+
     def vm_list(self, key, val):
         if key == "cnode":
             querystr = "SELECT id,host,project_id,uuid,vm_state,hostname \
