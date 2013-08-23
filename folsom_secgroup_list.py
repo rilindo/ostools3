@@ -74,6 +74,8 @@ grpidlist = openstack.secgrpid_list(uuid)
 # Output
 ########################
 print("%sSecurity Groups for %s%s" % (uln,hostname,nrm))
+if not grpidlist:
+    print(" %sNONE%s" % (red,nrm))
 for row in grpidlist: # Loop thru the groupid's assigned to this instance
     group = row[0]
 
