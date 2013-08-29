@@ -24,7 +24,7 @@ try:
     cindb_name = config.get('cinderdb', 'name')
     cindb_host = config.get('cinderdb', 'host')
 except:
-    print("The file ostools.cfg is not found or readable. Please copy ostools.cfg.TEMPLATE to ostools.cfg in the current directory and populate the file correctly.")
+    print("The file ostools.cfg is not found or readable. Please rename ostools.cfg.TEMPLATE to ostools.cfg and copy it to either the current directory or your home directory. Then follow the instructions in README.TXT for populating the file correctly.")
     exit(1)
 
     
