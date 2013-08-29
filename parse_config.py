@@ -3,7 +3,7 @@
 import os,ConfigParser
 
 config = ConfigParser.ConfigParser()
-config.read('ostools.cfg')
+config.read(['ostools.cfg',os.path.expanduser('~/ostools.cfg')])
 
 try:
     version = config.get('release', 'version')
